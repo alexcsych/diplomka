@@ -1,0 +1,31 @@
+%baseStyles
+  .owlIcon
+    width: 80px
+    height: 80px
+    object-fit: cover
+
+  .headerText
+    color: #FFF
+    text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25)
+    font-size: 28px
+    font-weight: 700
+
+.header
+  height: 90px
+  padding: 0 30px
+  background: #B16EF4
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.25)
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+  .headerItem
+    @extend %baseStyles
+    display: flex
+    align-items: center
+    gap: 40px
+
+  .name
+    @extend %baseStyles
+    display: flex
+    align-items: center
