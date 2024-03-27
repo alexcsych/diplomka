@@ -11,7 +11,7 @@ function Header () {
           alt='owl_icon'
           className={styles.owlIcon}
         />
-        <span className={styles.headerText}>OwlPc</span>
+        <h1 className={styles.headerText}>OwlPc</h1>
       </Link>
       <div className={styles.headerItem}>
         <Link to={`/login`} className={styles.headerText}>
