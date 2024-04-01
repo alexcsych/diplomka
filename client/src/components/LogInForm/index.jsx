@@ -1,22 +1,22 @@
 import React from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
 import styles from './LogInForm.module.sass'
+import { LogInSchema } from '../../utils/validationSchemas'
+import { useNavigate } from 'react-router-dom'
+import { loginUser } from '../../store/slices/userSlice'
+import { connect } from 'react-redux'
 
-const LogInForm = () => {
+const LogInForm = ({ loginUser }) => {
+  const navigate = useNavigate()
   const initialValues = {
     email: '',
     password: ''
   }
 
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid email').required('Email is required'),
-    password: Yup.string().required('Password is required')
-  })
-
   const handleSubmit = (values, { resetForm }) => {
-    alert(JSON.stringify(values, null, 2))
+    loginUser(values)
     resetForm()
+    navigate('/')
   }
 
   return (
@@ -25,7 +25,7 @@ const LogInForm = () => {
         <h2 className={styles.title}>Log In</h2>
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={LogInSchema}
           onSubmit={handleSubmit}
         >
           {({ errors, touched }) => (
@@ -76,4 +76,8 @@ const LogInForm = () => {
   )
 }
 
-export default LogInForm
+const mapDispatchToProps = dispatch => ({
+  loginUser: userData => dispatch(loginUser(userData))
+})
+
+export default connect(null, mapDispatchToProps)(LogInForm)

@@ -1,9 +1,13 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import * as Yup from 'yup'
 import styles from './SignUpForm.module.sass'
+import { signupUser } from '../../store/slices/userSlice'
+import { SignUpSchema } from '../../utils/validationSchemas'
+import { useNavigate } from 'react-router-dom'
 
-const SignUpForm = () => {
+const SignUpForm = ({ signupUser }) => {
+  const navigate = useNavigate()
   const initialValues = {
     userName: '',
     email: '',
@@ -12,20 +16,10 @@ const SignUpForm = () => {
     isAdmin: false
   }
 
-  const validationSchema = Yup.object().shape({
-    userName: Yup.string().required('Please enter your name'),
-    email: Yup.string().email('Invalid email').required('Email is required'),
-    password: Yup.string()
-      .min(6, 'Password must be at least 6 characters')
-      .required('Password is required'),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Passwords must match')
-      .required('Please confirm your password')
-  })
-
   const handleSubmit = (values, { resetForm }) => {
-    alert(JSON.stringify(values, null, 2))
+    signupUser(values)
     resetForm()
+    navigate('/')
   }
 
   return (
@@ -34,7 +28,7 @@ const SignUpForm = () => {
         <h2 className={styles.title}>Sign Up</h2>
         <Formik
           initialValues={initialValues}
-          validationSchema={validationSchema}
+          validationSchema={SignUpSchema}
           onSubmit={handleSubmit}
         >
           {({ errors, touched }) => (
@@ -116,7 +110,7 @@ const SignUpForm = () => {
                   type='checkbox'
                   className={styles.checkbox}
                 />
-                <label className={styles.checkboxLabel} for='isAdmin'>
+                <label className={styles.checkboxLabel} htmlFor='isAdmin'>
                   Sign up as Admin
                 </label>
               </div>
@@ -131,4 +125,8 @@ const SignUpForm = () => {
   )
 }
 
-export default SignUpForm
+const mapDispatchToProps = dispatch => ({
+  signupUser: userData => dispatch(signupUser(userData))
+})
+
+export default connect(null, mapDispatchToProps)(SignUpForm)
