@@ -66,7 +66,7 @@ module.exports.loginUser = async (req, res, next) => {
             email: body.email
           },
           JWT_SECRET,
-          { expiresIn: '1m' }
+          { expiresIn: '1h' }
         )
 
         await User.findOneAndUpdate(
