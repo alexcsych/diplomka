@@ -29,7 +29,7 @@ function Header ({ userData, logoutUser }) {
           </>
         ) : (
           <>
-            <span className={styles.headerText}>{userData.userName}</span>
+            <span className={styles.headerName}>{userData.userName}</span>
             <span
               className={styles.headerText}
               onClick={() => {
