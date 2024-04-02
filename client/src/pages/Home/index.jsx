@@ -3,6 +3,7 @@ import { getUser } from '../../store/slices/userSlice'
 import Header from '../../components/Header'
 import { connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import Banner from '../../components/Banner'
 
 function Home ({ getUser, error }) {
   const navigate = useNavigate()
@@ -23,6 +24,7 @@ function Home ({ getUser, error }) {
   return (
     <>
       <Header></Header>
+      <Banner></Banner>
     </>
   )
 }
