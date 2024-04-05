@@ -1,0 +1,27 @@
+.container 
+  display: flex
+  flex-wrap: wrap
+  max-width: 1200px
+  margin: 40px auto 0
+
+  .categoryItem
+    width: calc(100% - 10px)
+    margin: 10px 5px 
+
+    @media screen and (min-width: 400px)
+      width: calc(50% - 10px)
+      &:nth-child(2n+1) 
+        margin: 10px 10px 10px 0
+
+      &:nth-child(2n)  
+        margin: 10px 0 10px 10px 
+    @media screen and (min-width: 700px)
+      width: calc(33.33% - 20px)
+      &:nth-child(3n+1) 
+        margin: 10px 20px 10px 0
+
+      &:nth-child(3n+2) 
+        margin: 10px
+
+      &:nth-child(3n+3)  
+        margin: 10px 0 10px 20px 
