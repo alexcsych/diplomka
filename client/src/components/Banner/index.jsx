@@ -23,13 +23,13 @@ const slideContent = [
     image: Banner2
   },
   {
-    title: 'Аксесуари для комп’ютера',
+    title: 'Аксесуари',
     description:
       'Розкрийте повний потенціал вашого комп’ютера із нашими аксесуарами. Клавіатури, миші, монітори та багато іншого для покращення вашого робочого простору.',
     image: Banner3
   },
   {
-    title: 'Надійні комплектуючі для оновлення',
+    title: 'Надійні комплектуючі',
     description:
       'Оновіть свій комп’ютер із нашими надійними комплектуючими. Процесори, відеокарти, жорсткі диски та інші деталі для підвищення продуктивності.',
     image: Banner4
@@ -49,23 +49,21 @@ const settings = {
 
 function Banner () {
   return (
-    <div className={styles.page}>
-      <Slider {...settings}>
-        {slideContent.map((slide, index) => (
-          <div key={index} className={styles.sliderItem}>
-            <img
-              src={slide.image}
-              alt={`slide-${index}`}
-              className={styles.img}
-            />
-            <div className={styles.slideContent}>
-              <p className={styles.title}>{slide.title}</p>
-              <p className={styles.description}>{slide.description}</p>
-            </div>
+    <Slider {...settings}>
+      {slideContent.map((slide, index) => (
+        <div key={index} className={styles.sliderItem}>
+          <img
+            src={slide.image}
+            alt={`slide-${index}`}
+            className={styles.img}
+          />
+          <div className={styles.slideContent}>
+            <p className={styles.title}>{slide.title}</p>
+            <p className={styles.description}>{slide.description}</p>
           </div>
-        ))}
-      </Slider>
-    </div>
+        </div>
+      ))}
+    </Slider>
   )
 }
 
