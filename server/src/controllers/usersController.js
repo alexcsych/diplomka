@@ -2,7 +2,7 @@ require('dotenv').config()
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createHttpError = require('http-errors')
-const { User } = require('./../models')
+const { User } = require('../models')
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS, 10)
 const JWT_SECRET = process.env.JWT_SECRET
