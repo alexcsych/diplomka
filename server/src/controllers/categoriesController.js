@@ -1,6 +1,6 @@
 require('dotenv').config()
 const createHttpError = require('http-errors')
-const Category = require('../models/Category')
+const { Category } = require('../models')
 
 module.exports.getCategory = async (req, res, next) => {
   try {
