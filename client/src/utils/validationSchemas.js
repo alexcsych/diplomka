@@ -29,3 +29,31 @@ export const SignUpSchema = yup.object().shape({
     .required('Please confirm your password'),
   isAdmin: yup.bool().required('Role is required')
 })
+
+export const FilterSchema = yup.object().shape({
+  itemName: yup.string(),
+  fPrice: yup
+    .number()
+    .typeError('Price must be a number')
+    .min(0, 'Price must be a positive number')
+    .test(
+      'is-less-than-or-equal',
+      'Last price must be greater than or equal to first price',
+      function (value) {
+        const { lPrice } = this.parent
+        return value === undefined || lPrice === undefined || value <= lPrice
+      }
+    ),
+  lPrice: yup
+    .number()
+    .typeError('Price must be a number')
+    .min(0, 'Price must be a positive number')
+    .test(
+      'is-greater-than-or-equal',
+      'Last price must be greater than or equal to first price',
+      function (value) {
+        const { fPrice } = this.parent
+        return value === undefined || fPrice === undefined || value >= fPrice
+      }
+    )
+})
