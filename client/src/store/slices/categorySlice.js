@@ -25,7 +25,11 @@ const categorySlice = createSlice({
     isFetching: false,
     error: null
   },
-  reducers: {},
+  reducers: {
+    nullErrorCategory (state) {
+      state.error = null
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(getCategory.pending, state => {
@@ -45,11 +49,8 @@ const categorySlice = createSlice({
   }
 })
 
-const {
-  reducer
-  //  actions
-} = categorySlice
+const { reducer, actions } = categorySlice
 
-// export const {} = actions
+export const { nullErrorCategory } = actions
 
 export default reducer
