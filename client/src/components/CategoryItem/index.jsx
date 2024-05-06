@@ -1,14 +1,27 @@
 import React from 'react'
 import styles from './CategoryItem.module.sass'
-import { Link } from 'react-router-dom'
+import { setCategory } from '../../store/slices/itemSlice'
+import { connect } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
-function CategoryItem ({ categoryId, categoryName, image }) {
+function CategoryItem ({ categoryId, categoryName, image, setCategory }) {
+  console.log('categoryId :>> ', categoryId)
+  const navigate = useNavigate()
+  const handleClick = () => {
+    setCategory(categoryId)
+    navigate('/shop')
+  }
+
   return (
-    <Link to={`/shop?categoryId=${categoryId}`}>
+    <div onClick={() => handleClick()}>
       <img className={styles.img} src={`${image}`} alt='CategoryItem' />
       <p className={styles.name}>{categoryName}</p>
-    </Link>
+    </div>
   )
 }
 
-export default CategoryItem
+const mapDispatchToProps = dispatch => ({
+  setCategory: categoryId => dispatch(setCategory({ categoryId }))
+})
+
+export default connect(null, mapDispatchToProps)(CategoryItem)
