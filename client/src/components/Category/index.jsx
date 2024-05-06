@@ -2,8 +2,14 @@ import React from 'react'
 import styles from './Category.module.sass'
 import CategoryItem from '../CategoryItem'
 import { connect } from 'react-redux'
+import { getCategory } from '../../store/slices/categorySlice'
+import { useEffect } from 'react'
 
-function Category ({ categoryData }) {
+function Category ({ getCategory, categoryData }) {
+  useEffect(() => {
+    getCategory()
+  }, [getCategory])
+
   return (
     <div className={styles.container}>
       {categoryData.map(category => (
@@ -23,4 +29,8 @@ const mapStateToProps = state => {
   return { categoryData: state.categoryData.categoryData }
 }
 
-export default connect(mapStateToProps, null)(Category)
+const mapDispatchToProps = dispatch => ({
+  getCategory: () => dispatch(getCategory())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Category)
