@@ -1,11 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styles from './Header.module.sass'
 import { Link, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { logoutUser } from '../../store/slices/userSlice'
+import { getUser, logoutUser } from '../../store/slices/userSlice'
 
-function Header ({ userData, logoutUser }) {
-  console.log('userData :>> ', userData)
+function Header ({ getUser, userData, logoutUser }) {
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      getUser(token)
+    }
+  }, [getUser])
   const navigate = useNavigate()
   return (
     <div className={styles.header}>
@@ -51,6 +56,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+  getUser: token => dispatch(getUser(token)),
   logoutUser: () => dispatch(logoutUser())
 })
 
