@@ -4,13 +4,29 @@ import Home from './pages/Home'
 import LogIn from './pages/LogIn'
 import SignUp from './pages/SignUp'
 import WithNotAuthRoute from './WithNotAuthRoute'
+import ShopPage from './pages/ShopPage'
+import WithErrorHandler from './components/WithErrorHandler/WithErrorHandler'
 
 function App () {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Home />} />
-        <Route path='/shop' element={<Home />} />
+        <Route
+          path='/'
+          element={
+            <WithErrorHandler>
+              <Home />
+            </WithErrorHandler>
+          }
+        />
+        <Route
+          path='/shop'
+          element={
+            <WithErrorHandler>
+              <ShopPage />
+            </WithErrorHandler>
+          }
+        />
         <Route
           path='/login'
           element={
