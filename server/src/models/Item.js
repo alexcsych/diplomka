@@ -24,12 +24,6 @@ const Schema = new mongoose.Schema({
   itemImage: {
     type: String,
     required: true
-  },
-  rating: {
-    type: Number,
-    min: 1,
-    max: 5,
-    default: null
   }
 })
 
