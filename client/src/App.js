@@ -6,6 +6,7 @@ import SignUp from './pages/SignUp'
 import WithNotAuthRoute from './WithNotAuthRoute'
 import ShopPage from './pages/ShopPage'
 import WithErrorHandler from './components/WithErrorHandler/WithErrorHandler'
+import ItemPage from './pages/ItemPage'
 
 function App () {
   return (
@@ -24,6 +25,14 @@ function App () {
           element={
             <WithErrorHandler>
               <ShopPage />
+            </WithErrorHandler>
+          }
+        />
+        <Route
+          path='/item/:itemId'
+          element={
+            <WithErrorHandler>
+              <ItemPage />
             </WithErrorHandler>
           }
         />
