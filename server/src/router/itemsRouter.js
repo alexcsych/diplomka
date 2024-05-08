@@ -10,4 +10,6 @@ itemsRouter
   .route('/getFilterByCategory/:categoryId')
   .get(itemsController.getFilterByCategory)
 
+itemsRouter.route('/getItemById/:_id').get(itemsController.getItemById)
+
 module.exports = itemsRouter
