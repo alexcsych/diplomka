@@ -9,11 +9,11 @@ function ShopItem ({ item }) {
   for (let i = 0; i < 5; i++) {
     if (i < item.rating) {
       stars.push(
-        <FontAwesomeIcon key={i} icon={faStar} style={{ color: 'yellow' }} />
+        <FontAwesomeIcon key={i} icon={faStar} style={{ color: 'white' }} />
       )
     } else {
       stars.push(
-        <FontAwesomeIcon key={i} icon={faStar} style={{ color: 'white' }} />
+        <FontAwesomeIcon key={i} icon={faStar} style={{ color: '#7739c0' }} />
       )
     }
   }
