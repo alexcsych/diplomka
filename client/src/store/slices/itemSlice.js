@@ -58,6 +58,24 @@ export const getFilterByCategory = createAsyncThunk(
   }
 )
 
+export const getItemById = createAsyncThunk(
+  'item/getItemById',
+  async (id, thunkAPI) => {
+    console.log('id :>> ', id)
+    const { rejectWithValue } = thunkAPI
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/item/getItemById/${id}`
+      )
+      return response.data
+    } catch (err) {
+      const errorData = err?.response?.data ?? 'Gateway Timeout'
+      const errorStatus = err?.response?.status ?? 504
+      return rejectWithValue({ data: errorData, status: errorStatus })
+    }
+  }
+)
+
 const itemSlice = createSlice({
   name: 'item',
   initialState: {
@@ -65,6 +83,7 @@ const itemSlice = createSlice({
     fPrice: 0,
     lPrice: 1000000,
     itemData: [],
+    itemInfo: {},
     filterData: {},
     selectedFilter: {},
     categoryId: '',
@@ -136,6 +155,19 @@ const itemSlice = createSlice({
         }
       })
       .addCase(getFilterByCategory.rejected, (state, action) => {
+        state.isFetching = false
+        state.error = action.payload.data.errors
+      })
+      .addCase(getItemById.pending, state => {
+        state.isFetching = true
+        state.error = null
+      })
+      .addCase(getItemById.fulfilled, (state, action) => {
+        const { item } = action.payload.data
+        state.isFetching = false
+        state.itemInfo = { ...item }
+      })
+      .addCase(getItemById.rejected, (state, action) => {
         state.isFetching = false
         state.error = action.payload.data.errors
       })
