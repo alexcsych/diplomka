@@ -1,0 +1,43 @@
+.page
+  margin: 0 30px
+  @media screen and (max-width: 600px)
+    margin: 0 10px
+
+.container 
+  display: flex
+  justify-content: space-between
+  max-width: 1200px
+  margin: 60px auto 0
+  background-color: #b16ef4
+  border-radius: 10px
+  padding: 20px
+  gap: 20px
+  min-height: 500px
+  @media screen and (max-width: 900px)
+    padding: 10px
+    flex-direction: column
+
+  .links
+    display: flex
+    flex-direction: column
+    gap: 10px
+
+    .link
+      padding: 10px 20px
+      background-color:  #752fc5
+      color: white
+      font-weight: 700
+      font-size: 24px
+      border-radius: 10px
+      white-space: nowrap
+      &:hover
+        padding: 9px 19px
+        border: solid 1px white
+        background-color: #582a86
+        color: #ffffff
+        
+    
+    .activeLink
+      background-color: #bc46eb
+
+
