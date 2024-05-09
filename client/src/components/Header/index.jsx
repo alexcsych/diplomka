@@ -2,9 +2,19 @@ import React, { useEffect } from 'react'
 import styles from './Header.module.sass'
 import { Link, useNavigate } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { getUser, logoutUser } from '../../store/slices/userSlice'
+import {
+  getUser,
+  logoutUser,
+  nullErrorUser
+} from '../../store/slices/userSlice'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  faUser,
+  faShoppingCart,
+  faList
+} from '@fortawesome/free-solid-svg-icons'
 
-function Header ({ getUser, userData, logoutUser }) {
+function Header ({ nullErrorUser, getUser, userData, logoutUser }) {
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
@@ -14,30 +24,57 @@ function Header ({ getUser, userData, logoutUser }) {
   const navigate = useNavigate()
   return (
     <div className={styles.header}>
-      <Link to={`/`} className={styles.name}>
+      <div
+        onClick={() => {
+          nullErrorUser()
+          navigate('/')
+        }}
+        className={styles.name}
+      >
         <img
           src={'/images/owl_icon.jpg'}
           alt='owl_icon'
           className={styles.owlIcon}
         />
         <h1 className={styles.headerText}>OwlPc</h1>
-      </Link>
+      </div>
       <div className={styles.headerItem}>
         {!userData.userName ? (
           <>
-            <Link to={`/login`} className={styles.headerText}>
+            <span
+              onClick={() => {
+                nullErrorUser()
+                navigate('/login')
+              }}
+              className={styles.headerText}
+            >
               Log In
-            </Link>
-            <Link to={`/signup`} className={styles.headerText}>
+            </span>
+            <span
+              onClick={() => {
+                nullErrorUser()
+                navigate('/signup')
+              }}
+              className={styles.headerText}
+            >
               Sign Up
-            </Link>
+            </span>
           </>
         ) : (
           <>
-            <span className={styles.headerName}>{userData.userName}</span>
+            <Link to={`/profile/info`} className={styles.icon}>
+              <FontAwesomeIcon icon={faUser} color='white' />
+            </Link>
+            <Link to={`/profile/cart`} className={styles.icon}>
+              <FontAwesomeIcon icon={faShoppingCart} color='white' />
+            </Link>
+            <Link to={`/profile/order`} className={styles.icon}>
+              <FontAwesomeIcon icon={faList} color='white' />
+            </Link>
             <span
               className={styles.headerText}
               onClick={() => {
+                nullErrorUser()
                 logoutUser()
                 navigate('/login')
               }}
@@ -56,6 +93,7 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
+  nullErrorUser: () => dispatch(nullErrorUser()),
   getUser: token => dispatch(getUser(token)),
   logoutUser: () => dispatch(logoutUser())
 })
