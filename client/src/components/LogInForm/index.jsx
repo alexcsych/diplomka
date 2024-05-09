@@ -1,23 +1,28 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import styles from './LogInForm.module.sass'
 import { LogInSchema } from '../../utils/validationSchemas'
 import { useNavigate } from 'react-router-dom'
-import { loginUser } from '../../store/slices/userSlice'
+import { loginUser, nullErrorUser } from '../../store/slices/userSlice'
 import { connect } from 'react-redux'
 
-const LogInForm = ({ loginUser }) => {
+const LogInForm = ({ userData, error, nullErrorUser, loginUser }) => {
   const navigate = useNavigate()
   const initialValues = {
     email: '',
     password: ''
   }
 
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = values => {
+    nullErrorUser()
     loginUser(values)
-    resetForm()
-    navigate('/')
   }
+
+  useEffect(() => {
+    if (Object.keys(userData).length !== 0 && !error) {
+      navigate('/')
+    }
+  }, [navigate, userData, error])
 
   return (
     <div className={styles.container}>
@@ -64,7 +69,13 @@ const LogInForm = ({ loginUser }) => {
                   className={styles.error}
                 />
               </div>
-
+              <p className={styles.serverError}>
+                {error &&
+                  error.title +
+                    (error.validationErrors
+                      ? ` ${error.validationErrors[0]}`
+                      : '')}
+              </p>
               <button className={styles.submit} type='submit'>
                 Log In
               </button>
@@ -76,8 +87,16 @@ const LogInForm = ({ loginUser }) => {
   )
 }
 
+const mapStateToProps = state => {
+  return {
+    userData: state.userData.userData,
+    error: state.userData.error
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
+  nullErrorUser: () => dispatch(nullErrorUser()),
   loginUser: userData => dispatch(loginUser(userData))
 })
 
-export default connect(null, mapDispatchToProps)(LogInForm)
+export default connect(mapStateToProps, mapDispatchToProps)(LogInForm)
