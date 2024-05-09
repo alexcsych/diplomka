@@ -7,6 +7,7 @@ import WithNotAuthRoute from './WithNotAuthRoute'
 import ShopPage from './pages/ShopPage'
 import WithErrorHandler from './components/WithErrorHandler/WithErrorHandler'
 import ItemPage from './pages/ItemPage'
+import ProfilePage from './pages/ProfilePage'
 
 function App () {
   return (
@@ -50,6 +51,14 @@ function App () {
             <WithNotAuthRoute>
               <SignUp />
             </WithNotAuthRoute>
+          }
+        />
+        <Route
+          path='/profile/:pageId'
+          element={
+            <WithErrorHandler>
+              <ProfilePage />
+            </WithErrorHandler>
           }
         />
       </Routes>
