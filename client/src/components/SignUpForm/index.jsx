@@ -1,12 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { connect } from 'react-redux'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import styles from './SignUpForm.module.sass'
-import { signupUser } from '../../store/slices/userSlice'
+import { nullErrorUser, signupUser } from '../../store/slices/userSlice'
 import { SignUpSchema } from '../../utils/validationSchemas'
 import { useNavigate } from 'react-router-dom'
 
-const SignUpForm = ({ signupUser }) => {
+const SignUpForm = ({ userData, error, nullErrorUser, signupUser }) => {
   const navigate = useNavigate()
   const initialValues = {
     userName: '',
@@ -16,11 +16,15 @@ const SignUpForm = ({ signupUser }) => {
     isAdmin: false
   }
 
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = values => {
     signupUser(values)
-    resetForm()
-    navigate('/')
   }
+
+  useEffect(() => {
+    if (Object.keys(userData).length !== 0 && !error) {
+      navigate('/')
+    }
+  }, [navigate, userData, error])
 
   return (
     <div className={styles.container}>
@@ -114,6 +118,13 @@ const SignUpForm = ({ signupUser }) => {
                   Sign up as Admin
                 </label>
               </div>
+              <p className={styles.serverError}>
+                {error &&
+                  error.title +
+                    (error.validationErrors
+                      ? ` ${error.validationErrors[0]}`
+                      : '')}
+              </p>
               <button className={styles.submit} type='submit'>
                 Sign up
               </button>
@@ -125,8 +136,16 @@ const SignUpForm = ({ signupUser }) => {
   )
 }
 
+const mapStateToProps = state => {
+  return {
+    userData: state.userData.userData,
+    error: state.userData.error
+  }
+}
+
 const mapDispatchToProps = dispatch => ({
+  nullErrorUser: () => dispatch(nullErrorUser()),
   signupUser: userData => dispatch(signupUser(userData))
 })
 
-export default connect(null, mapDispatchToProps)(SignUpForm)
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpForm)
