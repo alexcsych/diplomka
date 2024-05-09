@@ -29,12 +29,14 @@
   width: 100%
   overflow: hidden
   @media screen and (max-width: 700px)
-    flex-direction: column
+    flex-direction: column-reverse
     
   .characteristics
     display: flex
     flex-direction: column
     flex-grow: 1
+    @media screen and (max-width: 700px)
+      margin-top: 20px
 
     .comment
       display: flex
@@ -47,16 +49,24 @@
 
       .commentTitle
         display: flex
+        align-items: center
         justify-content: space-between
         color: white
         font-weight: 700
         font-size: 20px
+        @media screen and (max-width: 700px)
+          font-size: 16px
         
-        .userName
-          @media screen and (max-width: 700px)
-            max-width: 50%
-            overflow: hidden
-            text-overflow: ellipsis
+        .userInfoBox
+          display: flex
+          align-items: center
+          gap: 10px
+
+          .userImg
+            width: 40px
+            height: 40px
+            object-fit: cover
+            border-radius: 50%
       
       .commentStars
         display: flex
@@ -78,7 +88,6 @@
     max-width: 40%
     @media screen and (max-width: 700px)
       max-width: 100%
-      margin-top: 20px
 
     .itemImage
       width: 100%

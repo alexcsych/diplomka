@@ -33,7 +33,14 @@ function Comment ({ itemInfo, comments }) {
   const renderComments = Object.values(comments).map(comment => (
     <div key={comment._id} className={styles.comment}>
       <div className={styles.commentTitle}>
-        <p className={styles.userName}>{comment.user.userName}</p>
+        <div className={styles.userInfoBox}>
+          <img
+            className={styles.userImg}
+            src={comment.user.userImage}
+            alt='userImage'
+          />
+          <p className={styles.userName}>{comment.user.userName}</p>
+        </div>
         <p>{new Date(comment.createdAt).toISOString().split('T')[0]}</p>
       </div>
       <p className={styles.commentStars}>{generateStars(comment.rating)}</p>
