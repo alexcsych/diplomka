@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const createHttpError = require('http-errors')
 const { User } = require('../models')
+const fs = require('fs')
+const path = require('path')
 
 const SALT_ROUNDS = parseInt(process.env.SALT_ROUNDS, 10)
 const JWT_SECRET = process.env.JWT_SECRET
@@ -98,6 +100,71 @@ module.exports.getUser = async (req, res, next) => {
     const { password, ...rest } = foundUser._doc
 
     res.status(200).send({ data: { user: rest } })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports.updateUser = async (req, res, next) => {
+  const authHeader = req.headers['authorization']
+  const token = authHeader && authHeader.split(' ')[1]
+
+  try {
+    if (req.body.password) {
+      const salt = await bcrypt.genSalt(SALT_ROUNDS)
+      const hashedPassword = await bcrypt.hash(req.body.password, salt)
+      req.body.password = hashedPassword
+    }
+
+    const foundUser = await User.findOne({ token: token })
+    let previousImageFilename = null
+
+    if (req.file) {
+      req.body = {
+        ...req.body,
+        userImage: `http://localhost:5000/img/${req.file.filename}`
+      }
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { token: token },
+      req.body,
+      {
+        new: true
+      }
+    ).select('-createdAt -updatedAt -__v')
+
+    if (!updatedUser) {
+      return next(createHttpError(404, 'User Not Found'))
+    }
+
+    if (req.file && req.file.filename && foundUser && foundUser.userImage) {
+      if (
+        !foundUser.userImage.startsWith('http://localhost:5000/img/anonym.jpg')
+      ) {
+        previousImageFilename = foundUser.userImage.split(
+          'http://localhost:5000/img/'
+        )[1]
+        const previousImagePath = path.join(
+          __dirname,
+          '../../public/images/',
+          previousImageFilename
+        )
+
+        if (fs.existsSync(previousImagePath)) {
+          fs.unlinkSync(previousImagePath)
+          console.log(`Previous image ${previousImageFilename} deleted.`)
+        }
+      }
+    }
+
+    const { password, ...rest } = updatedUser._doc
+    res.status(200).send({
+      data: {
+        user: JSON.parse(JSON.stringify(rest)),
+        updatedUser: JSON.parse(JSON.stringify(rest))
+      }
+    })
   } catch (err) {
     next(err)
   }
