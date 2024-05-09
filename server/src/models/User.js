@@ -28,6 +28,11 @@ const Schema = new mongoose.Schema(
     token: {
       type: String,
       required: true
+    },
+    userImage: {
+      type: String,
+      default: 'http://localhost:5000/img/anonym.jpg',
+      required: true
     }
   },
   {
