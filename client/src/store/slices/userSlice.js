@@ -59,10 +59,35 @@ export const getUser = createAsyncThunk(
   }
 )
 
+export const updateUser = createAsyncThunk(
+  'user/updateUser',
+  async ({ token, formData }, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI
+    try {
+      const response = await axios.patch(
+        'http://localhost:5000/api/user/updateUser',
+        formData,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+      return response.data
+    } catch (err) {
+      const errorData = err?.response?.data ?? 'Gateway Timeout'
+      const errorStatus = err?.response?.status ?? 504
+      return rejectWithValue({ data: errorData, status: errorStatus })
+    }
+  }
+)
+
 const userSlice = createSlice({
   name: 'user',
   initialState: {
     userData: {},
+    updatedUserData: {},
     isFetching: false,
     error: null
   },
@@ -73,6 +98,9 @@ const userSlice = createSlice({
     },
     nullErrorUser (state) {
       state.error = null
+    },
+    clearUpdatedUserData (state) {
+      state.updatedUserData = {}
     }
   },
   extraReducers: builder => {
@@ -122,11 +150,27 @@ const userSlice = createSlice({
         state.isFetching = false
         state.error = action.payload.data.errors
       })
+      .addCase(updateUser.pending, state => {
+        state.isFetching = true
+        state.error = null
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        const { updatedUser, user } = action.payload.data
+        state.isFetching = false
+        state.userData = user
+        state.updatedUserData = updatedUser
+        console.log('user :>> ', user)
+        localStorage.setItem('token', user.token)
+      })
+      .addCase(updateUser.rejected, (state, action) => {
+        state.isFetching = false
+        state.error = action.payload.data.errors
+      })
   }
 })
 
 const { reducer, actions } = userSlice
 
-export const { logoutUser, nullErrorUser } = actions
+export const { logoutUser, nullErrorUser, clearUpdatedUserData } = actions
 
 export default reducer
