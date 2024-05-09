@@ -23,7 +23,16 @@ const WithErrorHandler = ({
     if (errorItem && errorItem.status && errorItem.status === 404) {
       nullErrorItem()
       navigate('/')
-    } else if (errorUser || errorCategory || errorItem || errorComment) {
+    } else if (errorUser && errorUser.status === 403) {
+      localStorage.removeItem('token')
+      navigate('/login')
+    } else if (
+      (errorUser && errorUser.status !== 400 && errorUser.status !== 404) ||
+      errorCategory ||
+      errorItem ||
+      errorComment
+    ) {
+      console.log('errorUser :>> ', errorUser)
       nullErrorUser()
       nullErrorCategory()
       nullErrorItem()
