@@ -43,3 +43,18 @@ module.exports.logInSchem = yup.object().shape({
     .matches(/[^\w]/, 'Password requires a symbol')
     .required('Password is required')
 })
+
+module.exports.updateDataSchem = yup.object().shape({
+  userName: yup.string().min(2, 'Name must be 2 characters long'),
+  email: yup
+    .string()
+    .email('Invalid email format')
+    .test(
+      'is-unique',
+      'This email is already registered',
+      async function (value) {
+        const user = await User.findOne({ email: value })
+        return !user
+      }
+    )
+})
