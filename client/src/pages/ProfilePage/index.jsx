@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Header from '../../components/Header'
 import styles from './ProfilePage.module.sass'
 import { Link, useParams } from 'react-router-dom'
 import ProfileInfo from '../../components/ProfileInfo'
+import CartInfo from '../../components/CartInfo'
+import OrderInfo from '../../components/OrderInfo'
 
 function ProfilePage () {
   const { pageId } = useParams()
@@ -41,11 +43,11 @@ function ProfilePage () {
             <ProfileInfo></ProfileInfo>
           ) : pageId === 'cart' ? (
             <>
-              <div>cartInfo</div>
+              <CartInfo></CartInfo>
             </>
           ) : (
             <>
-              <div>orderInfo</div>
+              <OrderInfo></OrderInfo>
             </>
           )}
         </div>

@@ -1,0 +1,117 @@
+.container
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  gap: 20px
+  flex-grow: 1
+  background-color: #5d2e93
+  padding: 10px
+  border-radius: 10px
+
+  .formContainer
+    display: flex
+    flex-direction: column
+    gap: 20px
+
+    .titleMakeOrder
+      color: white
+      font-weight: 700
+      font-size: 20px
+
+    .inputBox
+      position: relative
+      display: flex
+      justify-content: space-between
+      background-color: #b16ef4
+      padding: 10px 
+      border-radius: 10px
+      gap: 10px
+      @media screen and (max-width: 700px)
+        flex-direction: column
+      
+      .errorBox
+        padding: 4px 9px
+        margin-bottom: 10px 
+        border: 1px solid red
+        
+      .error
+        position: absolute
+        font-size: 13px
+        bottom: 2px
+        right: 10px
+        color: red
+        font-weight: 700
+    
+      .label
+        color: white
+        font-weight: 700
+        font-size: 20px
+
+      input,
+      select 
+        width: 50%
+        padding: 5px 10px
+        font-size: 16px
+        border: none
+        border-radius: 5px
+        background-color: white
+        color: #5d2e93
+        @media screen and (max-width: 700px)
+          width: 100%
+
+        &::placeholder 
+          color: #5d2e93
+
+        &:focus 
+          outline: none
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.3)
+
+      select 
+        appearance: none
+        background-image: url('data:image/svg+xml;utf8,<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M7.293 8.707a1 1 0 0 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 1 1-1.414-1.414L10.586 12 7.293 8.707z"/></svg>')
+        background-repeat: no-repeat
+        background-position: right 10px top 50%
+        background-size: 16px
+
+      input
+        background-color: white
+        color: #5d2e93
+
+    .errorBox
+      padding: 10px 10px 20px
+
+  .bottom
+    display: flex
+    justify-content: space-between
+    align-items: center
+    gap: 10px
+    @media screen and (max-width: 700px)
+      display: flex
+      flex-direction: column
+
+    .totalSum
+      color: white
+      font-weight: 700
+      font-size: 20px
+
+    .btnBox
+      display: flex
+      gap: 10px
+      @media screen and (max-width: 400px)
+        display: flex
+        flex-direction: column
+
+      .btn
+        padding: 10px 20px
+        background-color:  #b16ef4
+        color: white
+        font-weight: 700
+        font-size: 24px
+        border-radius: 10px
+        &:hover
+          padding: 9px 19px
+          border: solid 1px white
+          background-color: #752fc5
+          color: #ffffff
+
+      

@@ -149,6 +149,7 @@ const userSlice = createSlice({
         state.userData = {}
         state.isFetching = false
         state.error = action.payload.data.errors
+        localStorage.removeItem('token')
       })
       .addCase(updateUser.pending, state => {
         state.isFetching = true

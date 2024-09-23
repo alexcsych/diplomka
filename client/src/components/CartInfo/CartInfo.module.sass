@@ -1,0 +1,105 @@
+.container
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  gap: 20px
+  flex-grow: 1
+  background-color: #5d2e93
+  padding: 10px
+  border-radius: 10px
+
+  .cartEmpty
+    display: flex
+    justify-content: center
+    color: white
+    font-weight: 700
+    font-size: 20px
+
+  .cartItemBox
+    display: flex
+    flex-direction: column
+    gap: 20px
+
+
+    .cartItem
+      display: flex
+      justify-content: space-between
+      background-color: #b16ef4
+      padding: 10px
+      border-radius: 10px
+      gap: 10px
+      color: white
+      font-weight: 700
+      font-size: 20px
+      @media screen and (max-width: 700px)
+        flex-direction: column
+
+
+      .flexContainer
+        display: flex
+        align-items: center
+        gap: 20px
+        @media screen and (max-width: 700px)
+          justify-content: flex-end
+
+        .amount
+          display: flex
+          align-items: center
+          gap: 10px
+
+          .amountBtn
+            display: flex
+            align-items: center
+            justify-content: center
+            height: 30px
+            width: 30px
+            color: white
+            font-weight: 700
+            font-size: 20px
+            background-color: #752fc5
+            border-radius: 10px
+            &:hover
+              padding: 4px 9px
+              border: solid 1px white
+              
+        .img
+          width:50px
+          height: 50px
+          object-fit: cover
+          border-radius: 5px
+          @media screen and (max-width: 700px)
+            width: 100%
+            height: auto
+
+      .flexTitle
+        display: flex
+        align-items: center
+        justify-content: space-between
+        flex-grow: 1
+        gap: 20px
+
+        .itemPrice
+          white-space: nowrap
+
+  .orderBox
+    display: flex
+    align-items: center
+    justify-content: space-between
+
+    .totalSum
+      color: white
+      font-weight: 700
+      font-size: 20px
+
+    .btn
+      padding: 10px 20px
+      background-color:  #b16ef4
+      color: white
+      font-weight: 700
+      font-size: 24px
+      border-radius: 10px
+      &:hover
+        padding: 9px 19px
+        border: solid 1px white
+        background-color: #752fc5
+        color: #ffffff

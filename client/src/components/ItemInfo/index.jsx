@@ -3,12 +3,29 @@ import styles from './ItemInfo.module.sass'
 import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
+import { addToCart, removeFromCart } from '../../store/slices/cartSlice'
+import { setIsInCart } from '../../store/slices/itemSlice'
+import { useNavigate } from 'react-router-dom'
 
-function ItemInfo ({ setStep, itemInfo }) {
+function ItemInfo ({
+  userData,
+  addToCart,
+  removeFromCart,
+  setStep,
+  itemInfo,
+  isInCart,
+  setIsInCart
+}) {
+  const navigate = useNavigate()
+  console.log('isInCart :>> ', isInCart)
   const paramsText = Object.entries({ ...itemInfo.params })
     .map(([key, value]) => {
       if (Array.isArray(value)) {
         value = value.join(' / ')
+      } else if (value === true) {
+        value = 'true'
+      } else if (value === false) {
+        value = 'false'
       }
       return `${value}`
     })
@@ -39,7 +56,29 @@ function ItemInfo ({ setStep, itemInfo }) {
           </div>
           <div className={styles.buy}>
             <p className={styles.price}>Price {itemInfo.price}₴</p>
-            <button className={styles.buyBtn}>Buy</button>
+            <button
+              onClick={async () => {
+                if (Object.keys(userData).length === 0) {
+                  navigate(`/login`)
+                } else {
+                  if (!isInCart) {
+                    console.log(
+                      'userData._id, itemInfo._id :>> ',
+                      userData._id,
+                      itemInfo._id
+                    )
+                    await addToCart(userData._id, itemInfo._id)
+                    setIsInCart(true)
+                  } else {
+                    await removeFromCart(userData._id, itemInfo._id)
+                    setIsInCart(false)
+                  }
+                }
+              }}
+              className={styles.buyBtn}
+            >
+              {isInCart ? 'Remove from Cart' : 'Add to Cart'}
+            </button>
           </div>
         </div>
       </div>
@@ -60,7 +99,17 @@ function ItemInfo ({ setStep, itemInfo }) {
 }
 
 const mapStateToProps = state => {
-  return { itemInfo: { ...state.itemData.itemInfo } }
+  return {
+    userData: { ...state.userData.userData },
+    itemInfo: { ...state.itemData.itemInfo },
+    isInCart: state.itemData.itemInfo.isInCart
+  }
 }
 
-export default connect(mapStateToProps, null)(ItemInfo)
+const mapDispatchToProps = dispatch => ({
+  setIsInCart: isInCart => dispatch(setIsInCart({ isInCart })),
+  addToCart: (user, item) => dispatch(addToCart({ user, item })),
+  removeFromCart: (user, item) => dispatch(removeFromCart({ user, item }))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemInfo)

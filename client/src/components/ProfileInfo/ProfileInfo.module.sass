@@ -33,6 +33,7 @@
   .imgBox
     display: flex
     flex-direction: column
+    justify-content: space-between
     gap: 30px
 
     .img
@@ -48,67 +49,74 @@
     width: 100%
     display: flex
     flex-direction: column
+    justify-content: space-between
     gap: 10px
 
-    .serverError
-      color: red
-      font-size: 15px
-      font-weight: 700
-      margin: 20px 0
-
-
-    .inputBox
+    .formBox
       width: 100%
-      position: relative
+      display: flex
+      flex-direction: column
+      gap: 10px
 
-      .input
-        width: 100%
-        background-color: #ffffff
-        margin-bottom: 20px 
-        padding: 10px
-        font-size: 15px
-        box-shadow: 0 2px 10px 0px rgba(177, 110, 244, 0.8)
-        border-radius: 10px
-        font-weight: 700
-        color: #31165d
-        border:  1px solid #a57df400
-
-        &:focus 
-          border-color: #a57df4
-      
-      .fileInput 
-        display: none 
-
-      .fileInputLabel 
-        display: flex
-        padding: 10px 20px
-        background-color: #752fc5
-        color: white
-        font-weight: 700
-        font-size: 24px
-        border-radius: 10px
-        cursor: pointer
-        transition: all 0.3s ease
-        
-        &:hover 
-          background-color: #582a86
-
-      .errorBox
-        border: 1px solid red
-
-      .error
-        position: absolute
-        font-size: 13px
-        bottom: 0
-        right: 0
+      .serverError
         color: red
+        font-size: 15px
         font-weight: 700
-    
-    .fileName
-      color: white
-      font-size: 20px
-      font-weight: 700
-      margin: 10px 0 20px
+        margin: 20px 0
+
+
+      .inputBox
+        width: 100%
+        position: relative
+
+        .input
+          width: 100%
+          background-color: #ffffff
+          margin-bottom: 20px 
+          padding: 10px
+          font-size: 15px
+          box-shadow: 0 2px 10px 0px rgba(177, 110, 244, 0.8)
+          border-radius: 10px
+          font-weight: 700
+          color: #31165d
+          border:  1px solid #a57df400
+
+          &:focus 
+            border-color: #a57df4
+        
+        .fileInput 
+          display: none 
+
+        .fileInputLabel 
+          display: flex
+          padding: 10px 20px
+          background-color: #752fc5
+          color: white
+          font-weight: 700
+          font-size: 24px
+          border-radius: 10px
+          cursor: pointer
+          transition: all 0.3s ease
+          
+          &:hover 
+            background-color: #582a86
+
+        .errorBox
+          border: 1px solid red
+
+        .error
+          position: absolute
+          font-size: 13px
+          bottom: 0
+          right: 0
+          color: red
+          font-weight: 700
+      
+      .fileName
+        color: white
+        font-size: 20px
+        font-weight: 700
+        margin: 10px 0 20px
 
 .btnFlex
   display: flex

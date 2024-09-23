@@ -60,12 +60,67 @@ export const getFilterByCategory = createAsyncThunk(
 
 export const getItemById = createAsyncThunk(
   'item/getItemById',
-  async (id, thunkAPI) => {
+  async ({ id, user }, thunkAPI) => {
+    console.log('getItemById')
     console.log('id :>> ', id)
+    console.log('user :>> ', user)
     const { rejectWithValue } = thunkAPI
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/item/getItemById/${id}`
+        `http://localhost:5000/api/item/getItemById/${id}`,
+        user && {
+          params: {
+            user: user
+          }
+        }
+      )
+      return response.data
+    } catch (err) {
+      const errorData = err?.response?.data ?? 'Gateway Timeout'
+      const errorStatus = err?.response?.status ?? 504
+      return rejectWithValue({ data: errorData, status: errorStatus })
+    }
+  }
+)
+
+export const addItem = createAsyncThunk(
+  'item/addItem',
+  async ({ token, data }, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/item/`,
+        data,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      )
+      return response.data
+    } catch (err) {
+      const errorData = err?.response?.data ?? 'Gateway Timeout'
+      const errorStatus = err?.response?.status ?? 504
+      return rejectWithValue({ data: errorData, status: errorStatus })
+    }
+  }
+)
+
+export const changeItem = createAsyncThunk(
+  'item/changeItem',
+  async ({ token, data }, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI
+    try {
+      const response = await axios.patch(
+        `http://localhost:5000/api/item/`,
+        data,
+        {
+          headers: {
+            Authorization: `Token ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
       )
       return response.data
     } catch (err) {
@@ -83,7 +138,10 @@ const itemSlice = createSlice({
     fPrice: 0,
     lPrice: 1000000,
     itemData: [],
-    itemInfo: {},
+    itemInfo: {
+      isInCart: false,
+      isInOrder: false
+    },
     filterData: {},
     selectedFilter: {},
     categoryId: '',
@@ -92,11 +150,19 @@ const itemSlice = createSlice({
     error: null,
     page: null,
     lastPage: null,
-    maxPage: null
+    maxPage: null,
+    itemId: null
   },
   reducers: {
     nullErrorItem (state) {
       state.error = null
+    },
+    nullItemId (state) {
+      state.itemId = null
+    },
+    setIsInCart (state, action) {
+      console.log('action.payload :>> ', action.payload)
+      state.itemInfo.isInCart = action.payload.isInCart
     },
     setCategory (state, action) {
       state.categoryId = action.payload.categoryId
@@ -163,11 +229,49 @@ const itemSlice = createSlice({
         state.error = null
       })
       .addCase(getItemById.fulfilled, (state, action) => {
+        console.log('getItemById.fulfilled')
+        console.log('action.payload.data :>> ', action.payload.data)
         const { item } = action.payload.data
         state.isFetching = false
         state.itemInfo = { ...item }
       })
       .addCase(getItemById.rejected, (state, action) => {
+        state.isFetching = false
+        state.error = action.payload.data.errors
+      })
+      .addCase(addItem.pending, state => {
+        state.isFetching = true
+        state.error = null
+      })
+      .addCase(addItem.fulfilled, (state, action) => {
+        const { itemInfo } = action.payload.data
+        console.log('itemInfo :>> ', itemInfo)
+        state.itemId = itemInfo._id
+        state.isFetching = false
+      })
+      .addCase(addItem.rejected, (state, action) => {
+        state.isFetching = false
+        state.error = action.payload.data.errors
+      })
+      .addCase(changeItem.pending, state => {
+        state.isFetching = true
+        state.error = null
+      })
+      .addCase(changeItem.fulfilled, (state, action) => {
+        const { updatedItem } = action.payload.data
+        console.log('updatedItem :>> ', {
+          ...updatedItem,
+          isInCart: state.itemInfo.isInCart,
+          isInOrder: state.itemInfo.isInOrder
+        })
+        state.itemInfo = {
+          ...updatedItem,
+          isInCart: state.itemInfo.isInCart,
+          isInOrder: state.itemInfo.isInOrder
+        }
+        state.isFetching = false
+      })
+      .addCase(changeItem.rejected, (state, action) => {
         state.isFetching = false
         state.error = action.payload.data.errors
       })
@@ -178,6 +282,8 @@ const { reducer, actions } = itemSlice
 
 export const {
   nullErrorItem,
+  nullItemId,
+  setIsInCart,
   setCategory,
   setPage,
   selectedFilterChange,

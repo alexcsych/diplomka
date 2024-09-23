@@ -1,6 +1,6 @@
 require('dotenv').config()
 const createHttpError = require('http-errors')
-const { Item, Rating } = require('../models')
+const { Item, Rating, Cart, Order } = require('../models')
 const { mongoose } = require('mongoose')
 const ITEMS_PER_PAGE = 6
 
@@ -91,6 +91,7 @@ module.exports.getFilterByCategory = async (req, res, next) => {
 
 module.exports.getItemById = async (req, res, next) => {
   const { _id } = req.params
+  const { user } = req.query
 
   try {
     const item = await Item.findOne({ _id })
@@ -103,14 +104,134 @@ module.exports.getItemById = async (req, res, next) => {
     const rating = ratings.length
       ? ratings.reduce((acc, cur) => acc + cur.rating, 0) / ratings.length
       : null
-
     const itemWithRating = {
       ...item.toObject(),
       rating,
       views: ratings.length ? ratings.length : 0
     }
+    let data = { item: itemWithRating }
+    if (user) {
+      const isInCart = await Cart.find({ user: user, item: _id })
+      const isInOrder = await Order.findOne({ user, 'items.item': _id })
+      data = {
+        item: {
+          ...itemWithRating,
+          isInCart: isInCart.length !== 0,
+          isInOrder: !!isInOrder
+        }
+      }
+    }
 
-    res.status(200).send({ data: { item: itemWithRating } })
+    res.status(200).send({ data: data })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports.getItemById = async (req, res, next) => {
+  const { _id } = req.params
+  const { user } = req.query
+
+  try {
+    const item = await Item.findOne({ _id })
+
+    if (!item) {
+      return next(createHttpError(404, 'Item not found'))
+    }
+
+    const ratings = await Rating.find({ item: _id })
+    const rating = ratings.length
+      ? ratings.reduce((acc, cur) => acc + cur.rating, 0) / ratings.length
+      : null
+    const itemWithRating = {
+      ...item.toObject(),
+      rating,
+      views: ratings.length ? ratings.length : 0
+    }
+    let data = { item: itemWithRating }
+    if (user) {
+      const isInCart = await Cart.find({ user: user, item: _id })
+      const isInOrder = await Order.findOne({ user, 'items.item': _id })
+      data = {
+        item: {
+          ...itemWithRating,
+          isInCart: isInCart.length !== 0,
+          isInOrder: !!isInOrder
+        }
+      }
+    }
+
+    res.status(200).send({ data: data })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports.addItem = async (req, res, next) => {
+  req.body = {
+    ...req.body,
+    params: JSON.parse(req.body.params),
+    itemImage: `http://localhost:5000/img/${req.file.filename}`
+  }
+  try {
+    console.log('req.body  :>> ', req.body)
+    const createdItem = await Item.create(req.body)
+    console.log('createdItem :>> ', createdItem)
+    res.status(200).send({ data: { itemInfo: createdItem } })
+  } catch (err) {
+    next(err)
+  }
+}
+
+module.exports.changeItem = async (req, res, next) => {
+  console.log('req.file :>> ', req.file)
+  req.body = {
+    ...req.body,
+    params: JSON.parse(req.body.params)
+  }
+  if (req.file && req.file.filename) {
+    req.body = {
+      ...req.body,
+      itemImage: `http://localhost:5000/img/${req.file.filename}`
+    }
+  }
+  try {
+    console.log('req.body  :>> ', req.body)
+    const { _id, ...rest } = req.body
+    const findedItem = await Item.findOne({ _id: _id })
+    const updatedItem = await Item.findOneAndUpdate({ _id: _id }, rest, {
+      new: true
+    })
+    if (!updatedItem) {
+      return next(createHttpError(404, 'Item Not Found'))
+    }
+    console.log('updatedItem :>> ', updatedItem)
+
+    if (req.file && req.file.filename && findedItem && findedItem.userImage) {
+      previousImageFilename = findedItem.userImage.split(
+        'http://localhost:5000/img/'
+      )[1]
+      const previousImagePath = path.join(
+        __dirname,
+        '../../public/images/',
+        previousImageFilename
+      )
+
+      if (fs.existsSync(previousImagePath)) {
+        fs.unlinkSync(previousImagePath)
+        console.log(`Previous image ${previousImageFilename} deleted.`)
+      }
+    }
+    const ratings = await Rating.find({ item: _id })
+    const rating = ratings.length
+      ? ratings.reduce((acc, cur) => acc + cur.rating, 0) / ratings.length
+      : null
+    const itemWithRating = {
+      ...updatedItem.toObject(),
+      rating,
+      views: ratings.length ? ratings.length : 0
+    }
+    res.status(200).send({ data: { updatedItem: itemWithRating } })
   } catch (err) {
     next(err)
   }

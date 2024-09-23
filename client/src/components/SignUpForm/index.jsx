@@ -17,6 +17,7 @@ const SignUpForm = ({ userData, error, nullErrorUser, signupUser }) => {
   }
 
   const handleSubmit = values => {
+    nullErrorUser()
     signupUser(values)
   }
 
@@ -118,13 +119,14 @@ const SignUpForm = ({ userData, error, nullErrorUser, signupUser }) => {
                   Sign up as Admin
                 </label>
               </div>
-              <p className={styles.serverError}>
-                {error &&
-                  error.title +
+              {error && (
+                <p className={styles.serverError}>
+                  {error.title +
                     (error.validationErrors
                       ? ` ${error.validationErrors[0]}`
                       : '')}
-              </p>
+                </p>
+              )}
               <button className={styles.submit} type='submit'>
                 Sign up
               </button>

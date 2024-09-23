@@ -69,13 +69,14 @@ const LogInForm = ({ userData, error, nullErrorUser, loginUser }) => {
                   className={styles.error}
                 />
               </div>
-              <p className={styles.serverError}>
-                {error &&
-                  error.title +
+              {error && (
+                <p className={styles.serverError}>
+                  {error.title +
                     (error.validationErrors
                       ? ` ${error.validationErrors[0]}`
                       : '')}
-              </p>
+                </p>
+              )}
               <button className={styles.submit} type='submit'>
                 Log In
               </button>

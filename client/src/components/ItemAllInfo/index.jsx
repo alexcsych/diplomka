@@ -3,6 +3,8 @@ import styles from './ItemAllInfo.module.sass'
 import { connect } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faStar } from '@fortawesome/free-solid-svg-icons'
+import { setIsInCart } from '../../store/slices/itemSlice'
+import { addToCart, removeFromCart } from '../../store/slices/cartSlice'
 
 function formatKey (text) {
   let result = ''
@@ -17,11 +19,21 @@ function formatKey (text) {
   return result
 }
 
-function ItemAllInfo ({ itemInfo }) {
+function ItemAllInfo ({
+  itemInfo,
+  userData,
+  setIsInCart,
+  addToCart,
+  removeFromCart
+}) {
   const characteristicsText = Object.entries({ ...itemInfo.params }).map(
     ([key, value]) => {
       if (Array.isArray(value)) {
         value = value.join('/')
+      } else if (value === true) {
+        value = 'true'
+      } else if (value === false) {
+        value = 'false'
       }
       return (
         <div className={styles.row} key={key}>
@@ -37,6 +49,10 @@ function ItemAllInfo ({ itemInfo }) {
     .map(([key, value]) => {
       if (Array.isArray(value)) {
         value = value.join(' / ')
+      } else if (value === true) {
+        value = 'true'
+      } else if (value === false) {
+        value = 'false'
       }
       return `${value}`
     })
@@ -73,7 +89,25 @@ function ItemAllInfo ({ itemInfo }) {
           <p className={styles.text}>{paramsText}</p>
           <div className={styles.buy}>
             <p className={styles.price}>Price {itemInfo.price}₴</p>
-            <button className={styles.buyBtn}>Buy</button>
+            <button
+              onClick={async () => {
+                if (!itemInfo.isInCart) {
+                  console.log(
+                    'userData._id, itemInfo._id :>> ',
+                    userData._id,
+                    itemInfo._id
+                  )
+                  await addToCart(userData._id, itemInfo._id)
+                  setIsInCart(true)
+                } else {
+                  await removeFromCart(userData._id, itemInfo._id)
+                  setIsInCart(false)
+                }
+              }}
+              className={styles.buyBtn}
+            >
+              {itemInfo.isInCart ? 'Remove from Cart' : 'Add to Cart'}
+            </button>
           </div>
         </div>
       </div>
@@ -82,7 +116,16 @@ function ItemAllInfo ({ itemInfo }) {
 }
 
 const mapStateToProps = state => {
-  return { itemInfo: { ...state.itemData.itemInfo } }
+  return {
+    userData: { ...state.userData.userData },
+    itemInfo: { ...state.itemData.itemInfo }
+  }
 }
 
-export default connect(mapStateToProps, null)(ItemAllInfo)
+const mapDispatchToProps = dispatch => ({
+  setIsInCart: isInCart => dispatch(setIsInCart({ isInCart })),
+  addToCart: (user, item) => dispatch(addToCart({ user, item })),
+  removeFromCart: (user, item) => dispatch(removeFromCart({ user, item }))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ItemAllInfo)

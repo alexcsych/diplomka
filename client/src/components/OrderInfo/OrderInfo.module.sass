@@ -1,0 +1,100 @@
+.orderEmpty
+  display: flex
+  flex-grow: 1
+  justify-content: center
+  color: white
+  font-weight: 700
+  font-size: 20px
+
+  
+.container
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  gap: 20px
+  flex-grow: 1
+  background-color: #5d2e93
+  padding: 10px
+  border-radius: 10px
+
+  .orderBox
+    display: flex
+    flex-direction: column
+    background-color: #b16ef4
+    gap: 10px
+    padding: 10px
+    border-radius: 10px
+
+    .descriptionBox
+      display: flex
+      flex-grow: 1
+      justify-content: space-between
+      flex-wrap: wrap
+      gap: 10px
+
+    .titleBox
+      display: flex
+      justify-content: space-between
+      align-items: center
+      flex-wrap: wrap
+      gap: 10px
+      color: white
+      font-weight: 700
+      font-size: 20px
+      overflow: hidden
+
+      .orderId
+        overflow: hidden
+        white-space: nowrap
+        text-overflow: ellipsis
+
+    .textBox
+      display: flex
+      justify-content: space-between
+      align-items: center
+      flex-wrap: wrap
+      gap: 10px
+      color: white
+      font-weight: 700
+      font-size: 20px
+      overflow: hidden
+      padding: 10px
+      border-radius: 10px
+      background-color: #9441e7
+
+    .itemsTitle
+      color: white
+      font-weight: 700
+      font-size: 20px
+
+    .itemBox
+      display: flex
+      flex-direction: column
+      gap: 10px
+      color: white
+      font-weight: 700
+      font-size: 20px
+      overflow: hidden
+      padding: 10px
+      border-radius: 10px
+      background-color: #9441e7
+
+      .img
+        width: 50px
+        height: 50px
+        object-fit: cover
+        border-radius: 5px
+        @media screen and (max-width: 500px)
+          width: 100%
+          height: auto
+ 
+      .imgTitleBox
+        display: flex
+        gap: 10px
+        align-items: center
+        @media screen and (max-width: 500px)
+          align-items: flex-start
+          flex-direction: column
+
+
+

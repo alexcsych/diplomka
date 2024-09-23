@@ -95,84 +95,89 @@ function ProfileInfo ({
         >
           {({ errors, touched }) => (
             <Form className={styles.form}>
-              <div className={styles.inputBox}>
-                <Field
-                  type='text'
-                  name='userName'
-                  placeholder='Enter your name'
-                  className={`${styles.input} ${
-                    touched.itemName && errors.itemName
-                      ? `${styles.errorBox}`
-                      : ''
-                  }`}
-                />
-                <ErrorMessage
-                  name='userName'
-                  component='div'
-                  className={styles.error}
-                />
+              <div className={styles.formBox}>
+                <div className={styles.inputBox}>
+                  <Field
+                    type='text'
+                    name='userName'
+                    placeholder='Enter your name'
+                    className={`${styles.input} ${
+                      touched.itemName && errors.itemName
+                        ? `${styles.errorBox}`
+                        : ''
+                    }`}
+                  />
+                  <ErrorMessage
+                    name='userName'
+                    component='div'
+                    className={styles.error}
+                  />
+                </div>
+                <div className={styles.inputBox}>
+                  <Field
+                    type='email'
+                    name='email'
+                    placeholder='Enter your email'
+                    className={`${styles.input} ${
+                      touched.itemName && errors.itemName
+                        ? `${styles.errorBox}`
+                        : ''
+                    }`}
+                  />
+                  <ErrorMessage
+                    name='email'
+                    component='div'
+                    className={styles.error}
+                  />
+                </div>
+                <div className={styles.inputBox}>
+                  <Field
+                    type='password'
+                    name='password'
+                    placeholder='Enter new password (not required)'
+                    className={`${styles.input} ${
+                      touched.itemName && errors.itemName
+                        ? `${styles.errorBox}`
+                        : ''
+                    }`}
+                  />
+                  <ErrorMessage
+                    name='password'
+                    component='div'
+                    className={styles.error}
+                  />
+                </div>
+                <div className={styles.inputBox}>
+                  <label htmlFor='userImage' className={styles.fileInputLabel}>
+                    Choose Image (.jpg, .jpeg, .png)
+                  </label>
+                  <input
+                    type='file'
+                    id='userImage'
+                    name='userImage'
+                    className={styles.fileInput}
+                    accept='.jpg, .jpeg, .png'
+                    onChange={event => {
+                      const file = event.currentTarget.files[0]
+                      console.log('file :>> ', file)
+                      setUserImageFile(file)
+                    }}
+                  />
+                </div>
+                {userImageFile && (
+                  <p className={styles.fileName}>
+                    {`File: ${userImageFile.name}`}
+                  </p>
+                )}
+                {error && (
+                  <p className={styles.serverError}>
+                    {error.title +
+                      (error.validationErrors
+                        ? ` ${error.validationErrors[0]}`
+                        : '')}
+                  </p>
+                )}
               </div>
-              <div className={styles.inputBox}>
-                <Field
-                  type='email'
-                  name='email'
-                  placeholder='Enter your email'
-                  className={`${styles.input} ${
-                    touched.itemName && errors.itemName
-                      ? `${styles.errorBox}`
-                      : ''
-                  }`}
-                />
-                <ErrorMessage
-                  name='email'
-                  component='div'
-                  className={styles.error}
-                />
-              </div>
-              <div className={styles.inputBox}>
-                <Field
-                  type='password'
-                  name='password'
-                  placeholder='Enter new password (not required)'
-                  className={`${styles.input} ${
-                    touched.itemName && errors.itemName
-                      ? `${styles.errorBox}`
-                      : ''
-                  }`}
-                />
-                <ErrorMessage
-                  name='password'
-                  component='div'
-                  className={styles.error}
-                />
-              </div>
-              <div className={styles.inputBox}>
-                <label htmlFor='userImage' className={styles.fileInputLabel}>
-                  Choose Image (.jpg, .jpeg, .png)
-                </label>
-                <input
-                  type='file'
-                  id='userImage'
-                  name='userImage'
-                  className={styles.fileInput}
-                  accept='.jpg, .jpeg, .png'
-                  onChange={event => {
-                    const file = event.currentTarget.files[0]
-                    console.log('file :>> ', file)
-                    setUserImageFile(file)
-                  }}
-                />
-              </div>
-              <p className={styles.fileName}>
-                {userImageFile && `File: ${userImageFile.name}`}
-              </p>
-              <p className={styles.serverError}>
-                {error &&
-                  error.title +
-                    (error.validationErrors
-                      ? ` ${error.validationErrors[0]}`
-                      : '')}
-              </p>
               <div className={styles.btnFlex}>
                 <div className={styles.btnContainer}>
                   <button className={styles.btn} type='submit'>

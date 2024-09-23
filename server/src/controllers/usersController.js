@@ -18,7 +18,8 @@ module.exports.createUser = async (req, res, next) => {
     body.token = jwt.sign(
       {
         userName: body.userName,
-        email: body.email
+        email: body.email,
+        isAdmin: body.isAdmin
       },
       JWT_SECRET,
       { expiresIn: '1h' }
@@ -65,7 +66,8 @@ module.exports.loginUser = async (req, res, next) => {
         rest.token = jwt.sign(
           {
             userName: foundUser.userName,
-            email: body.email
+            email: body.email,
+            isAdmin: foundUser.isAdmin
           },
           JWT_SECRET,
           { expiresIn: '1h' }

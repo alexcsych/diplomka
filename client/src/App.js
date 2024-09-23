@@ -8,6 +8,7 @@ import ShopPage from './pages/ShopPage'
 import WithErrorHandler from './components/WithErrorHandler/WithErrorHandler'
 import ItemPage from './pages/ItemPage'
 import ProfilePage from './pages/ProfilePage'
+import WithAuthRoute from './WithAuthRoute'
 
 function App () {
   return (
@@ -56,9 +57,9 @@ function App () {
         <Route
           path='/profile/:pageId'
           element={
-            <WithErrorHandler>
+            <WithAuthRoute>
               <ProfilePage />
-            </WithErrorHandler>
+            </WithAuthRoute>
           }
         />
       </Routes>

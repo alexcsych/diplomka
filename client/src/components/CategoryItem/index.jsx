@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 function CategoryItem ({ categoryId, categoryName, image, setCategory }) {
-  console.log('categoryId :>> ', categoryId)
   const navigate = useNavigate()
   const handleClick = () => {
     setCategory(categoryId)

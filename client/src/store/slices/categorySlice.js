@@ -38,7 +38,6 @@ const categorySlice = createSlice({
       })
       .addCase(getCategory.fulfilled, (state, action) => {
         const { categories } = action.payload.data
-        console.log('categories :>> ', categories)
         state.isFetching = false
         state.categoryData = categories
       })
